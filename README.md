@@ -133,6 +133,7 @@ Use this value as the workload_identity_provider value in your GitHub Actions YA
 ### Configure Github secrets
 
 Create the following secrets in your Github repository. They are not actually sensitive secrets, but I find it neat to reference the values from Github actions by variable names.
+  - **GCP_APP_NAME**: The name of your app, e.g., 'hello-cloudrun', used in the Docker image tag.
   - **GCP_PROJECT_ID**: The ID of your project. It's the value you stored in `$PROJECT_ID`. You can also find it in the Google Cloud console.
   - **GCP_WORKLOAD_IDENTITY_PROVIDER**: It's the value you found in the last step of the previous section
   - **GCP_SERVICE_ACCOUNT_EMAIL**: The email of the service account you have created. You can find this value in the Google Cloud console under IAM -> Service Account.
