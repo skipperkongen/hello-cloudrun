@@ -1,10 +1,15 @@
 # hello-cloudrun
-More secure reimplementation of hello-cloudrun using [Workload Identity Federation](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions) with the [google-github-actions/auth](https://github.com/google-github-actions/auth) Github Action to authenticate. See [setup](https://github.com/google-github-actions/auth#setup) for instructions.
+
+This is a complete walkthrough for how to get a (minimal) Dockerised website (using Flask) up and running on Google Cloud Run. The instructions include setting up a (ci)cd pipeline in Github Actions that securely deploys your project to Google whenever you push new code to the main branch on Github.
+
+It does _not_ cover how to terraform resources, e.g., a database, or anything else that you'd normally include in a real production application. Nor how to set up unit testing in the pipeline.
+
+This is a more secure reimplementation of my previous hello-cloudrun walkthrough which used downloaded key credentials. This walkthrough instead uses [Workload Identity Federation](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions) with the [google-github-actions/auth](https://github.com/google-github-actions/auth) Github Action to authenticate. See [setup](https://github.com/google-github-actions/auth#setup) for alternative instructions.
 
 When you are done, you will have:
 
 - A running web service deployed to Google Cloud Run
-- Automatically deploy changes via Github Actions
+- Github Actions pipeline that automatically deploys code changes to Google
 
 ## Complete walkthrough
 
