@@ -128,7 +128,7 @@ gcloud iam workload-identity-pools providers describe $PROVIDER_NAME \
   --workload-identity-pool=$POOL_NAME \
   --format="value(name)"
 ```
-Use this value as the workload_identity_provider value in your GitHub Actions YAML.
+Place this value in the Github secret GCP_WORKLOAD_IDENTITY_PROVIDER (see below).
 
 ### Configure Github secrets
 

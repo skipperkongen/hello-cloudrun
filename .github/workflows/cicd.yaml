@@ -37,9 +37,6 @@ jobs:
     - name: Print some info
       run: gcloud info
 
-    - name: Set project
-      run: gcloud config set project hello-cloudrun-348109
-
     - name: List services
       run: gcloud run services list
 
