@@ -28,45 +28,52 @@ In browser:
 
 In the Cloud Shell (or terminal):
 
-1. Login:
+Login:
 ```bash
 gcloud auth login  #terminal only
 ```
-1. Set environment variables that will be used later:
+
+Set environment variables that will be used later:
 ```bash
 export PROJECT_ID='hello-cloudrun-1234'  # use the actual project ID
 export ACCOUNT_NAME='hello-cloudrun-sa'
 ```
-1. Select the project:
+
+Select the project:
 ```bash
 gcloud config set project $PROJECT_ID
 ```
-1. Enable required APIs in Google cloud:
+
+Enable required APIs in Google cloud:
 ```bash
 gcloud services enable \
 cloudbuild.googleapis.com \
 run.googleapis.com \
 containerregistry.googleapis.com
 ```
-1. Create a service account that will own the running process:
+
+Create a service account that will own the running process:
 ```bash
 gcloud iam service-accounts create $ACCOUNT_NAME \
   --description="Account that manages services in $PROJECT_ID" \
   --display-name="service-account-$PROJECT_ID"
 ```
-1. Assign role `run.admin` to service account:
+
+Assign role `run.admin` to service account:
 ```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
   --role=roles/run.admin
 ```
-1. Assign role `storage.admin` to service account:
+
+Assign role `storage.admin` to service account:
 ```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
   --role=roles/storage.admin
 ```
-1. Assign role `iam.serviceAccountUser` to service account:
+
+Assign role `iam.serviceAccountUser` to service account:
 ```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
@@ -79,25 +86,28 @@ To enable Github to deploy to Google Cloud, we will now configure [Workload Iden
 
 In Google Cloud (or terminal):
 
-1. Create some more environment variables, this time for the Workload Identity Federation:
+Create some more environment variables, this time for the Workload Identity Federation:
 ```bash
 export POOL_NAME='hello-cloudrun-pool'
 export PROVIDER_NAME='hello-cloudrun-provider'
 export REPO='skipperkongen/hello-cloudrun' # should match you Github repo
 ```
-1. Enable the IAM Credentials API:
+
+Enable the IAM Credentials API:
 ```bash
 gcloud services enable iamcredentials.googleapis.com \
  --project $PROJECT_ID
 ```
-1. Create a Workload Identity _pool_:
+
+Create a Workload Identity _pool_:
 ```bash
 gcloud iam workload-identity-pools create $POOL_NAME \
  --project=$PROJECT_ID \
  --location="global" \
  --display-name="Identity pool"
 ```
-1. Get the full ID of the Workload Identity pool:
+
+Get the full ID of the Workload Identity pool:
 ```bash
 gcloud iam workload-identity-pools describe $POOL_NAME \
  --project=$PROJECT_ID \
@@ -108,7 +118,8 @@ Save this value as an environment variable:
 ```bash
 export WORKLOAD_IDENTITY_POOL_ID='...'  # value from above
 ```
-1. Create a Workload Identity _Provider_ in that pool
+
+Create a Workload Identity _Provider_ in that pool
 ```bash
 gcloud iam workload-identity-pools providers create-oidc $PROVIDER_NAME \
   --project=$PROJECT_ID \
@@ -118,14 +129,16 @@ gcloud iam workload-identity-pools providers create-oidc $PROVIDER_NAME \
   --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
   --issuer-uri="https://token.actions.githubusercontent.com"
 ```
-1. Allow authentications from the Workload Identity Provider originating from your repository to impersonate the Service Account created above:
+
+Allow authentications from the Workload Identity Provider originating from your repository to impersonate the Service Account created above:
 ```bash
 gcloud iam service-accounts add-iam-policy-binding "${ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --project=$PROJECT_ID \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO}"
 ```
-1. Extract the Workload Identity Provider resource name:
+
+Extract the Workload Identity Provider resource name:
 ```bash
 gcloud iam workload-identity-pools providers describe $PROVIDER_NAME \
   --project=$PROJECT_ID \
@@ -133,6 +146,7 @@ gcloud iam workload-identity-pools providers describe $PROVIDER_NAME \
   --workload-identity-pool=$POOL_NAME \
   --format="value(name)"
 ```
+
 Place this value in the Github secret GCP_WORKLOAD_IDENTITY_PROVIDER (see below).
 
 ### Configure Github secrets
