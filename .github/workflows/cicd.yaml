@@ -34,20 +34,20 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
 
-    - name: Print some info
-      run: gcloud info
-
-    - name: List services
-      run: gcloud run services list
-
-    # - name: Configure Docker
-    #   run: gcloud auth configure-docker --quiet
+    # - name: Print some info
+    #   run: gcloud info
     #
-    # - name: Build Docker image
-    #   run: docker build . -t $IMAGE_NAME
-    #
-    # - name: Push Docker image
-    #   run: docker push $IMAGE_NAME
+    # - name: List services
+    #   run: gcloud run services list
 
-    # - name: Deploy Docker image
-    #   run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --platform managed --allow-unauthenticated
+    - name: Configure Docker
+      run: gcloud auth configure-docker --quiet
+
+    - name: Build Docker image
+      run: docker build . -t $IMAGE_NAME
+
+    - name: Push Docker image
+      run: docker push $IMAGE_NAME
+
+    - name: Deploy Docker image
+      run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --platform managed --allow-unauthenticated
