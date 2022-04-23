@@ -34,6 +34,12 @@ jobs:
     - name: Print some info
       run: gcloud info
 
+    - name: Set project
+      run: gcloud config set project hello-cloudrun-348109
+
+    - name: List services
+      run: gcloud run services list
+
     # - name: Configure Docker
     #   run: gcloud auth configure-docker --quiet
     #
@@ -43,5 +49,5 @@ jobs:
     # - name: Push Docker image
     #   run: docker push $IMAGE_NAME
 
-    - name: Deploy Docker image
-      run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --platform managed --allow-unauthenticated
+    # - name: Deploy Docker image
+    #   run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --platform managed --allow-unauthenticated
